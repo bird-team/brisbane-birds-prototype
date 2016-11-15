@@ -1,0 +1,29 @@
+Package: brisbanebirds
+Type: Package
+Title: Brisbane Bird Atlas
+Version: 0.0.0.1
+Authors@R: c(person(c("Jeffrey", "O"), "Hanson", email='jeffrey.hanson@uqconnect.edu.au', role = c("aut", "cre")),
+  person(c("Richard", "A"), "Fuller", role = c("aut")))
+Description: 
+Imports:
+  bookdown,
+  ggplot2,
+  leaflet,
+  dygraphs,
+  R6,
+  plotly,
+  gridExtra,
+  data.table,
+  plyr,
+  dplyr,
+  rgdal,
+  raster,
+  rgeos,
+  RcppTOML
+Remotes: rstudio/bookdown
+Depends:
+  R(>= 3.3.1)
+License: GPL-3
+URL: https://github.com/bird-team/brisbane-birds
+BugReports: https://github.com/bird-team/brisbane-birds
+Maintainer: Jeffrey O Hanson <jeffrey.hanson@uqconnect.edu.au>
