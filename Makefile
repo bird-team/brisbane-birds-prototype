@@ -1,16 +1,16 @@
 # clean compiled book
 clean:
-	rm -rf book/*
-
-# generate initial book with no text -- warning: this will reset all the book pages
-init: code/parameters/general.toml code/R/init.R data/book-resources/*
-	cp -r data/book-resources/* book
-	R CMD BATCH --no-save --no-restore ./code/R/init.R
-	mv *.Rout book/
+	@rm -rf book/*
 
 # generate data files for book
 data: code/parameters/general.toml code/parameters/data.toml code/R/Species.R code/R/data.R data/ebird/* data/study-area/*
 	R CMD BATCH --no-save --no-restore ./code/R/data.R
+	mv *.Rout book/
+
+# generate initial book with no text -- warning: this will reset all the book pages
+init: code/parameters/general.toml code/R/init.R data/book-resources/* data
+	cp -r data/book-resources/* book
+	R CMD BATCH --no-save --no-restore ./code/R/init.R
 	mv *.Rout book/
 
 # update graphs in existing book pages with graphs in template file
@@ -21,7 +21,7 @@ update: code/parameters/general.toml code/R/update.R
 # build book
 build:
 	cd book;\
-	Rscript -e "bookdown::renderbook('index.Rmd', 'bookdown::gitbook')"
+	Rscript -e "bookdown::render_book('index.Rmd')"
 	mv *.Rout book/
 
 # deploy book to website

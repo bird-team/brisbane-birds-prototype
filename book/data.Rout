@@ -1,0 +1,253 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> #### Initialization
+> # set parameters
+> study.area.PTH <- dir('data/study-area', '^.*\\.shp$', full.names=TRUE)
+> unzip(dir('data/ebird', '^.*\\.zip$', full.names=TRUE), exdir=tempdir())
+> ebird.PTH <- dir(tempdir(), '^.*\\.csv$', full.names=TRUE)
+> taxonomy.PTH <- 'data/taxonomy/BWL-BirdLife_Australia_Working_List_v2.csv'
+> 
+> # load packages
+> library(data.table)
+> library(rgdal)
+Loading required package: sp
+rgdal: version: 1.1-10, (SVN revision 622)
+ Geospatial Data Abstraction Library extensions to R successfully loaded
+ Loaded GDAL runtime: GDAL 1.10.1, released 2013/08/26
+ Path to GDAL shared files: /usr/share/gdal/1.10
+ Loaded PROJ.4 runtime: Rel. 4.8.0, 6 March 2012, [PJ_VERSION: 480]
+ Path to PROJ.4 shared files: (autodetected)
+ Linking to sp version: 1.2-3 
+> library(rgeos)
+rgeos version: 0.3-21, (SVN revision 540)
+ GEOS runtime version: 3.4.2-CAPI-1.8.2 r3921 
+ Linking to sp version: 1.2-3 
+ Polygon checking: TRUE 
+
+> library(raster)
+
+Attaching package: 'raster'
+
+The following object is masked from 'package:data.table':
+
+    shift
+
+> library(plyr)
+> library(dplyr)
+------------------------------------------------------------------------------
+data.table + dplyr code now lives in dtplyr.
+Please library(dtplyr)!
+------------------------------------------------------------------------------
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:plyr':
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise,
+    summarize
+
+The following objects are masked from 'package:raster':
+
+    intersect, select, union
+
+The following objects are masked from 'package:rgeos':
+
+    intersect, setdiff, union
+
+The following objects are masked from 'package:data.table':
+
+    between, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> library(RcppTOML)
+> library(assertthat)
+> 
+> # load code
+> source('code/R/Species.R')
+> 
+> # load parameters
+> general.parameters.LST <- parseTOML('code/parameters/general.toml')
+> data.parameters.LST <- parseTOML('code/parameters/data.toml')
+> 
+> #### Preliminary processing
+> # load data
+> ebird.DF <- fread(ebird.PTH, data.table=FALSE)  
+Read 2.7% of 372923 rowsRead 29.5% of 372923 rowsRead 53.6% of 372923 rowsRead 67.0% of 372923 rowsRead 93.9% of 372923 rowsRead 372923 rows and 47 (of 47) columns from 0.131 GB file in 00:00:08
+Warning messages:
+1: In fread(ebird.PTH, data.table = FALSE) :
+  Bumped column 8 to type character on data row 199, field contains 'Pheasant Coucal (Pheasant)'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+2: In fread(ebird.PTH, data.table = FALSE) :
+  Bumped column 9 to type character on data row 199, field contains 'Centropus phasianinus [phasianinus Group]'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+3: In fread(ebird.PTH, data.table = FALSE) :
+  Bumped column 45 to type character on data row 3435, field contains 'Introduced/Exotic'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+4: In fread(ebird.PTH, data.table = FALSE) :
+  Bumped column 42 to type character on data row 4156, field contains 'G249979'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+5: In fread(ebird.PTH, data.table = FALSE) :
+  Bumped column 11 to type character on data row 8037, field contains 'NB'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+> taxonomy.DF <- fread(taxonomy.PTH, data.table=FALSE)
+> setnames(taxonomy.DF, gsub(' ', '.', names(taxonomy.DF), fixed=TRUE))
+> 
+> study.area.SHP <- shapefile(study.area.PTH) %>%
++   spTransform(CRS(general.parameters.LST$crs.code))
+> 
+> # data checks
+> assert_that(
++   all(has_name(
++     ebird.DF,
++       c(data.parameters.LST[['scientific.column.name']],
++         data.parameters.LST[['common.column.name']],
++         data.parameters.LST[['longitude.column.name']],
++         data.parameters.LST[['latitude.column.name']],
++         data.parameters.LST[['date.column.name']],
++         unlist(data.parameters.LST[['points.column.names']])
++       )
++   )),
++   nrow(ebird.DF) > 0,
++   nrow(study.area.SHP@data) > 0,
++   sum(is.na(data.parameters.LST[['longitude.column.name']])) == 0,
++   sum(is.na(data.parameters.LST[['latitude.column.name']])) == 0
++ )
+[1] TRUE
+> 
+> # standardise data columns
+> ebird.DF$Date <- strptime(
++     ebird.DF[[data.parameters.LST[['date.column.name']]]],
++     format=data.parameters.LST[['date.column.format']]
++   ) %>% format('%d/%m/%Y')
+> assert_that(sum(is.na(ebird.DF$Date)) == sum(is.na(ebird.DF[[data.parameters.LST[['date.column.name']]]]))) # check date conversions worked
+[1] TRUE
+> setnames(ebird.DF,
++   c(data.parameters.LST[['scientific.column.name']], data.parameters.LST[['common.column.name']],
++     data.parameters.LST[['longitude.column.name']], data.parameters.LST[['latitude.column.name']]),
++   c('Scientific.name', 'Common.name', 'Longitude', 'Latitude')
++ )
+> 
+> # remove non-species from data-set
+> ebird.DF <- ebird.DF %>%
++   filter(!grepl(' sp.', Scientific.name, fixed=TRUE))
+> 
+> # get species family data  
+> ebird.DF <- ebird.DF %>% left_join(
++   taxonomy.DF %>%
++     select(Taxon.scientific.name,Family.common.name,Family.scientific.name,Order) %>%
++     rename(Scientific.name = Taxon.scientific.name, Order.scientific.name=Order),
++     by = 'Scientific.name'
++ )
+> 
+> 
+> # TODO handle inconsistent species names
+> ebird.DF <- ebird.DF  %>% filter(!is.na(Family.common.name))
+> # assert_that(sum(is.na(ebird.DF$Family.common.name))==0)
+> 
+> # extract unique species and sort by scientic name
+> ebird.species.DF <- ebird.DF %>%
++   select(Scientific.name, Common.name, Family.common.name,
++          Family.scientific.name, Order.scientific.name) %>% 
++   distinct() %>%
++   arrange(.[[1]])
+> 
+> # subset data
+> if (is.numeric(general.parameters.LST[['number.species']])) {
++   ebird.species.DF <- ebird.species.DF[seq_len(general.parameters.LST[['number.species']]),]
++   ebird.DF <- ebird.DF[ebird.DF$Scientific.name %in% ebird.species.DF$Scientific.name,]
++ } else if (general.parameters.LST[['number.species']]!='all') {
++   stop("argument to 'number.species' in 'code/parameters/general.toml' is not valid")
++ }
+> 
+> # download elevation data
+> dir.create('data/altitude_data', showWarnings=FALSE, recursive=TRUE)
+> elevation.RST <- getData('alt', country='AUS', path='data/altitude_data')
+> 
+> # assign ids
+> ebird.species.DF <- ebird.species.DF %>%
++   mutate(species.id = formatC(seq_len(nrow(ebird.species.DF)), width=4, format='d', flag='0'),
++          family.id = as.integer(factor(Family.scientific.name))) %>%
++   mutate(family.id = formatC(family.id, width=4, format='d', flag='0'))
+>   
+> #### Main processing
+> ## create grid data
+> grid.RST <- study.area.SHP %>%
++   extent() %>%
++   raster(res=data.parameters.LST[['grid.resolution']])
+> grid.RST <- setValues(grid.RST, ncell(grid.RST)) %>%
++   mask(study.area.SHP)
+> 
+> ## create spatial points data  
+> attr.DF <- ebird.DF %>% 
++   select(Date, one_of(unname(unlist(data.parameters.LST[['points.column.names']]))))
+> setnames(
++   attr.DF,
++   unname(unlist(data.parameters.LST[['points.column.names']])), 
++   names(data.parameters.LST[['points.column.names']])
++ )
+> 
+> # add in elevation data
+> attr.DF$Elevation <- extract(elevation.RST,
++                              spTransform(ebird.DF %>% 
++                                            select(Longitude, Latitude) %>%
++                                            as.matrix() %>%
++                                            SpatialPoints(proj4string=CRS('+init=epsg:4326')),
++                                          elevation.RST@crs))
+> 
+> # add in year, month and season columns
+> attr.DF$Month <- format(strptime(attr.DF$Date, '%d/%m/%Y'), '%b')
+> attr.DF$Year <- format(strptime(attr.DF$Date, '%d/%m/%Y'), '%Y')
+> attr.DF$Season <- rep('', nrow(attr.DF))
+> attr.DF$Season[attr.DF$Month %in% c(12, 1, 2)] <- 'Summer'
+> attr.DF$Season[attr.DF$Month %in% 3:5] <- 'Autumn'
+> attr.DF$Season[attr.DF$Month %in% 6:8] <- 'Winter'
+> attr.DF$Season[attr.DF$Month %in% 9:11] <- 'Spring'
+> 
+> # create spatial data
+> ebird.PTS <- SpatialPointsDataFrame(
++     coords=ebird.DF %>% select(Longitude, Latitude) %>% as.matrix(),
++     data=attr.DF,
++     proj4string=CRS('+init=epsg:4326')
++   ) %>% spTransform(CRS(general.parameters.LST$crs.code))
+> 
+> # create species objects
+> species.LST <- llply(
++   seq_len(nrow(ebird.species.DF)),
++   function(i) {
++     # create species object
++     Species$new(
++       scientific.name=ebird.species.DF[[1]][i],
++       common.name=ebird.species.DF[[2]][i],
++       observations=ebird.PTS[ebird.DF[[data.parameters.LST[['scientific.column.name']]]] == ebird.species.DF[[1]][i],]
++     )
++   }
++ )
+> names(species.LST) <- ebird.species.DF[[1]]
+> 
+> #### Exports
+> # save species objects
+> dir.create('book/data', showWarnings=FALSE, recursive=TRUE)
+> writeRaster(grid.RST, 'book/data/grid.tif', NAflag=-9999, overwrite=TRUE)
+> saveRDS(ebird.species.DF, 'book/data/species_names.rds')
+> saveRDS(species.LST, 'book/data/species_data.rds')
+> 
+> proc.time()
+   user  system elapsed 
+ 19.018   1.523  22.608 

@@ -68,11 +68,10 @@ ebird.DF <- ebird.DF %>%
 # get species family data  
 ebird.DF <- ebird.DF %>% left_join(
   taxonomy.DF %>%
-    select(Taxon.scientific.name,Family.common.name,Family.scientific.name) %>%
-    rename(Scientific.name = Taxon.scientific.name),
+    select(Taxon.scientific.name,Family.common.name,Family.scientific.name,Order) %>%
+    rename(Scientific.name = Taxon.scientific.name, Order.scientific.name=Order),
     by = 'Scientific.name'
 )
-
 
 # TODO handle inconsistent species names
 ebird.DF <- ebird.DF  %>% filter(!is.na(Family.common.name))
@@ -80,7 +79,8 @@ ebird.DF <- ebird.DF  %>% filter(!is.na(Family.common.name))
 
 # extract unique species and sort by scientic name
 ebird.species.DF <- ebird.DF %>%
-  select(Scientific.name, Common.name, Family.common.name,Family.scientific.name) %>% 
+  select(Scientific.name, Common.name, Family.common.name,
+         Family.scientific.name, Order.scientific.name) %>% 
   distinct() %>%
   arrange(.[[1]])
 

@@ -17,7 +17,7 @@ ebird.species.DF <- readRDS(ebird.species.PTH)
 
 # create family data
 ebird.family.DF <- ebird.species.DF %>%
-  select(family.id, Family.scientific.name) %>%
+  select(Order.scientific.name,Family.scientific.name) %>%
   distinct()
 
 #### Main processing
@@ -27,8 +27,11 @@ llply(
   function(i) {
     writeLines(
       gsub('$$FAMILYINDEX$$', i, chapter.template.CHR, fixed=TRUE),
-      paste0('book/', ebird.family.DF$family.id[i],
-             '-', '0000', '-', ebird.family.DF$Family.scientific.name[i],'.Rmd'
+      paste0('book/', 
+             ebird.family.DF$Order.scientific.name[i],
+             '-',
+             ebird.family.DF$Family.scientific.name[i],
+             '.Rmd'
       )
     )
   }
@@ -40,9 +43,11 @@ llply(
   function(i) {
     writeLines(
       gsub('$$SPECIESINDEX$$', i, species.template.CHR, fixed=TRUE),
-      paste0('book/', ebird.species.DF$family.id[i],
-             '-', ebird.species.DF$species.id[i],
-             '-',ebird.species.DF$scientific.name[i],'.Rmd'
+      paste0('book/', ebird.species.DF$Order.scientific.name[i],
+             '-', ebird.species.DF$Family.scientific.name[i],
+             '-', 
+             gsub(' ', '-', ebird.species.DF$Scientific.name[i], fixed=TRUE),
+             '.Rmd'
       )
     )
   }

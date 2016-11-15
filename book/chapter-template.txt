@@ -1,0 +1,7 @@
+```{r, include=FALSE}
+family.id <- $$FAMILYINDEX$$
+```
+
+#  `r unique(ebird.species.DF$Family)[family.id]`
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed justo nunc. In in cursus turpis, sollicitudin pellentesque lacus. Aliquam et orci malesuada, tristique justo quis, feugiat ex. Phasellus at sem sit amet sapien consequat fringilla. Praesent pretium aliquet ante, eu maximus augue placerat ut. Donec odio erat, vehicula non accumsan quis, ultricies eu arcu. Aliquam erat volutpat.
