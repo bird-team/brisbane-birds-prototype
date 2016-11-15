@@ -1,0 +1,17 @@
+title = "data parameters"
+
+grid.resolution = 1000 # resolution of grid in meters
+
+scientific.column.name = "SCIENTIFIC_NAME" # column name for species' scientific names
+common.column.name = "COMMON_NAME" # column name for species' common names
+
+date.column.name = "OBSERVATION_DATE" # column name for observation date
+date.column.format = "%d/%m/%Y"  # date format for observation dates - see ?strptime for more information
+
+longitude.column.name = "LON" # column name for longitude of observation 
+latitude.column.name = "LAT"# column name for latitude of observation
+
+["points.column.names"] # data in columns to use for point attributes
+Comment = "TRIP_COMMENTS"
+Type = "PROTOCOL_TYPE"
+
