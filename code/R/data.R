@@ -6,6 +6,7 @@ ebird.PTH <- dir(tempdir(), '^.*\\.csv$', full.names=TRUE)
 taxonomy.PTH <- 'data/taxonomy/BWL-BirdLife_Australia_Working_List_v2.csv'
 
 # load packages
+library(magrittr)
 library(data.table)
 library(rgdal)
 library(rgeos)
@@ -15,6 +16,12 @@ library(dplyr)
 library(RcppTOML)
 library(assertthat)
 library(ggmap)
+
+# define functions
+select <- dplyr::select
+filter <- dplyr::filter
+rename <- dplyr::rename
+extract <- raster::extract
 
 # load code
 source('code/R/Species.R')
@@ -78,6 +85,11 @@ setnames(ebird.DF,
   c('species.scientific.name', 'species.common.name', 'longitude', 'latitude')
 )
 
+# omit records collected before manually specified date
+ebird.DF <- ebird.DF %>%
+  filter(strptime(Date, format='%d/%m/%Y') >=
+         strptime(data.parameters.LST[['start.date']], format='%d/%m/%Y'))
+
 # remove non-species from data-set
 ebird.DF <- ebird.DF %>%
   filter(!grepl(' sp.', species.scientific.name, fixed=TRUE))
@@ -139,15 +151,22 @@ attr.DF$Elevation <- extract(elevation.RST,
                               spTransform(elevation.RST@crs))
 
 # add in year, month and season columns
-attr.DF$MonthInteger <- format(strptime(attr.DF$Date, '%d/%m/%Y'), '%m') %>% as.numeric()
 attr.DF$Month <- format(strptime(attr.DF$Date, '%d/%m/%Y'), '%b')
-attr.DF$Year <- format(strptime(attr.DF$Date, '%d/%m/%Y'), '%Y') %>% as.numeric()
+attr.DF$Year <- format(strptime(attr.DF$Date, '%d/%m/%Y'), '%Y')
 attr.DF$Season <- rep('', nrow(attr.DF))
-attr.DF$Season[attr.DF$MonthInteger %in% c(12, 1, 2)] <- 'Summer'
-attr.DF$Season[attr.DF$MonthInteger %in% 3:5] <- 'Autumn'
-attr.DF$Season[attr.DF$MonthInteger %in% 6:8] <- 'Winter'
-attr.DF$Season[attr.DF$MonthInteger %in% 9:11] <- 'Spring'
-attr.DF$Month <- factor(attr.DF$Month, levels = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+attr.DF$Season[attr.DF$Month %in% c('Dec', 'Jan', 'Feb')] <- 'Summer'
+attr.DF$Season[attr.DF$Month %in% c('Mar', 'Apr', 'May')] <- 'Autumn'
+attr.DF$Season[attr.DF$Month %in% c('Jun', 'Jul', 'Aug')] <- 'Winter'
+attr.DF$Season[attr.DF$Month %in% c('Sep', 'Oct', 'Nov')] <- 'Spring'
+attr.DF$Month <- factor(attr.DF$Month, 
+                        levels = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+attr.DF$Year <- factor(attr.DF$Year,
+                       levels = data.parameters.LST[['start.date']] %>%
+                                strptime(format='%d/%m/%Y') %>%
+                                format('%Y') %>%
+                                as.numeric() %>%
+                                seq(max(as.numeric(as.character(attr.DF$Year)))) %>%
+                                as.character())
 
 # create spatial data
 ebird.PTS <- SpatialPointsDataFrame(

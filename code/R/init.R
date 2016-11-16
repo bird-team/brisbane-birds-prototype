@@ -1,10 +1,10 @@
 #### Initialization
 # set parameters
-species.template.PTH <- 'data/book-resources/species-template.txt'
-chapter.template.PTH <- 'data/book-resources/chapter-template.txt'
+species.template.PTH <- 'book/species-template.txt'
+chapter.template.PTH <- 'book/chapter-template.txt'
 species.PTH <- 'book/data/species.rds'
 family.PTH <- 'book/data/family.rds'
-bookdown.yml.PTH <- 'data/book-resources/_bookdown.yml'
+bookdown.yml.PTH <- 'book/_bookdown.yml'
 
 # load packages
 library(plyr)
@@ -57,4 +57,4 @@ bookdown.yml.LST$rmd_files <- c('index.Rmd', unlist(llply(
 
 
 #### Exports
-writeLines(as.yaml(bookdown.yml.LST), 'book/_bookdown.yml')
+writeLines(as.yaml(bookdown.yml.LST), bookdown.yml.PTH)

@@ -1,0 +1,106 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> #### Initialization
+> # set parameters
+> species.template.PTH <- 'book/species-template.txt'
+> chapter.template.PTH <- 'book/chapter-template.txt'
+> species.PTH <- 'book/data/species.rds'
+> family.PTH <- 'book/data/family.rds'
+> bookdown.yml.PTH <- 'book/_bookdown.yml'
+> 
+> # load packages
+> library(plyr)
+> library(dplyr)
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:plyr':
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise,
+    summarize
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> library(yaml)
+> 
+> #### Preliminary processing
+> # load data
+> species.template.CHR <- readLines(species.template.PTH)
+> chapter.template.CHR <- readLines(chapter.template.PTH)
+> species.DATA <- readRDS(species.PTH)
+> bookdown.yml.LST <- yaml.load_file(bookdown.yml.PTH)
+> 
+> #### Main processing
+> # create _bookdown.yml
+> bookdown.yml.LST$rmd_files <- c('index.Rmd', unlist(llply(
++   species.DATA$get_family_scientific_names(),
++   function(x) {
++     # init
++     curr.order.CHR <- species.DATA$get_order_scientific_names(family.scientific.name==x)
++     curr.spp.CHR <- species.DATA$get_species_scientific_names(family.scientific.name==x)
++     # create file names
++     ret <- character(length(curr.spp.CHR)+1)
++     ret[1] <- paste0(curr.order.CHR, '-', x, '.Rmd')
++     ret[2:length(ret)] <- paste0(curr.order.CHR,
++                                   '-', x, '-', 
++                                   gsub(' ', '-', curr.spp.CHR, fixed=TRUE),
++                                   '.Rmd')
++     # write family chapter header
++     writeLines(
++       gsub('$$FAMILYNAME$$', x, chapter.template.CHR, fixed=TRUE),
++       file.path('book/', ret[1])
++     )
++     # loop over species
++     sapply(
++       seq_along(curr.spp.CHR),
++       function(j) {
++         # write species
++         writeLines(
++           gsub('$$SPECIESNAME$$', curr.spp.CHR[j], species.template.CHR, fixed=TRUE),
++           file.path('book/', ret[j+1])
++         )
++       }
++     )
++     # exports
++     return(ret)
++   }
++ ), use.names=FALSE))
+Warning messages:
+1: In ret[1] <- paste0(curr.order.CHR, "-", x, ".Rmd") :
+  number of items to replace is not a multiple of replacement length
+2: In ret[1] <- paste0(curr.order.CHR, "-", x, ".Rmd") :
+  number of items to replace is not a multiple of replacement length
+3: In ret[1] <- paste0(curr.order.CHR, "-", x, ".Rmd") :
+  number of items to replace is not a multiple of replacement length
+4: In ret[1] <- paste0(curr.order.CHR, "-", x, ".Rmd") :
+  number of items to replace is not a multiple of replacement length
+> 
+> 
+> 
+> #### Exports
+> writeLines(as.yaml(bookdown.yml.LST), bookdown.yml.PTH)
+> 
+> proc.time()
+   user  system elapsed 
+  1.166   0.055   1.300 

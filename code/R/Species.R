@@ -37,7 +37,7 @@ Species <- R6::R6Class("Species",
       self$data <<- data.frame(species.scientific.name=species.scientific.name,
                                   species.common.name=species.common.name,
                                   family.scientific.name=family.scientific.name,
-                                  family.common.name=family.scientific.name,
+                                  family.common.name=family.common.name,
                                   order.scientific.name=order.scientific.name,
                                   stringsAsFactors=FALSE)
       self$data$species.observations <<- species.observations
@@ -134,6 +134,7 @@ Species <- R6::R6Class("Species",
       if (knitr:::is_html_output()) {
         # create color palette
         values <- sapply(seasonal.LST, function(x) x$count) %>% c()
+        if (length(values)==1) values <- c(0, values)
         pal <- leaflet::colorNumeric('YlGnBu',
                                     values,
                                     na.color='transparent')
@@ -209,7 +210,8 @@ Species <- R6::R6Class("Species",
           ggplot2::xlab('') +
           ggplot2::ylab('Percentage of records (%)') +
           ggplot2::scale_y_continuous(labels = scales::percent) +
-          ggplot2::scale_x_discrete(drop = FALSE)
+          ggplot2::scale_x_discrete(drop = FALSE) +
+          ggplot2::theme(axis.text.x = ggplot2::element_text(angle=40, hjust=1))
       
       # elevation by month
       p2 <- curr.DF %>%
@@ -220,7 +222,8 @@ Species <- R6::R6Class("Species",
           ggplot2::geom_boxplot() +
           ggplot2::xlab('') +
           ggplot2::ylab('Elevation (m)') +
-          ggplot2::scale_x_discrete(drop = FALSE)
+          ggplot2::scale_x_discrete(drop = FALSE) +
+          ggplot2::theme(axis.text.x = ggplot2::element_text(angle=40, hjust=1))
       
       # reporting rate by year
       p3 <- curr.DF %>%
@@ -232,10 +235,12 @@ Species <- R6::R6Class("Species",
           ggplot2::geom_bar(stat='identity') +
           ggplot2::xlab('') +
           ggplot2::ylab('Percentage of records (%)') +
-          ggplot2::scale_y_continuous(labels=scales::percent)
+          ggplot2::scale_y_continuous(labels=scales::percent) +
+          ggplot2::scale_x_discrete(drop=FALSE) +
+          ggplot2::theme(axis.text.x = ggplot2::element_text(angle=40, hjust=1))
 
       # assemble plot
-      gridExtra::arrangeGrob(p1, p2, p3, nrow=1)
+      gridExtra::grid.arrange(p1, p2, p3, nrow=1)
     },
         
     ## family methods

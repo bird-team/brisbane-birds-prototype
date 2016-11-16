@@ -1,5 +1,7 @@
 title = "data parameters"
 
+start.date = '01/01/2006' # omit records collected before this date
+
 grid.resolution = 5000 # resolution of grid in meters
 
 scientific.column.name = "SCIENTIFIC_NAME" # column name for species' scientific names

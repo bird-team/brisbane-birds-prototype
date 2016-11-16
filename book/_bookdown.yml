@@ -1,0 +1,27 @@
+book_filename: brisbane-birds
+chapter_name: 'Chapter '
+rmd_files:
+- index.Rmd
+- Passeriformes-Meliphagidae.Rmd
+- Passeriformes-Meliphagidae-Acanthagenys-rufogularis.Rmd
+- Passeriformes-Acanthizidae.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-chrysorrhoa.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-lineata.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-nana.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-pusilla.Rmd
+- Passeriformes-Acanthizidae.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-chrysorrhoa.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-lineata.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-nana.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-pusilla.Rmd
+- Passeriformes-Acanthizidae.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-chrysorrhoa.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-lineata.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-nana.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-pusilla.Rmd
+- Passeriformes-Acanthizidae.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-chrysorrhoa.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-lineata.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-nana.Rmd
+- Passeriformes-Acanthizidae-Acanthiza-pusilla.Rmd
+

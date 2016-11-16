@@ -9,7 +9,9 @@ os:
 
 apt_packages:
   - libgeos-dev
-  - libgeos-c1    
+  - libgeos-c1
+  - libgdal-dev
+  - libproj-dev
   - curl
   - libssh2-1-dev
   - qpdf 

@@ -15,3 +15,7 @@
 # do not ignore the following files
 !.gitkeep
 !*/
+
+# raw book files
+book/_book/*
+book/_bookdown_files/*
