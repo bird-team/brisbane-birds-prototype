@@ -1,7 +1,9 @@
 --- 
 title: "Brisbane Bird Atlas"
-author: ["Jeffrey O Hanson", 'Richard A Fuller"]
-date: "`r Sys.Date()`"
+author: |
+  | Richard A. Fuller$^1$, Jeffrey O. Hanson$^1$
+  | $^1$School of Biological Sciences, The University of Queensland, Brisbane, QLD, Australia
+  | Correspondance should be addressed to r.fuller@uq.edu.au
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
@@ -13,10 +15,15 @@ description: "Bird atlas for Brisbane, Australia"
 ---
 
 ```{r, include=FALSE}
+# load packages
+library(dplyr)
+
+# load functions
+source('../code/R/misc.R')
+
 # load data
-grid.RST <- raster('book/data/grid.tif'))
-ebird.species.DF <- readRDS('book/data/species_names.rds')
-species.LST <- readRDS('book/data/species_data.rds')
+grid.PLY <- readRDS('data/grid.rds')
+species.DATA <- readRDS('data/species.rds')
 ```
 
 # Preface

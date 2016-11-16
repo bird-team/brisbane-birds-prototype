@@ -1,6 +1,6 @@
 title = "data parameters"
 
-grid.resolution = 1000 # resolution of grid in meters
+grid.resolution = 5000 # resolution of grid in meters
 
 scientific.column.name = "SCIENTIFIC_NAME" # column name for species' scientific names
 common.column.name = "COMMON_NAME" # column name for species' common names

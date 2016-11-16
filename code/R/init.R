@@ -2,54 +2,63 @@
 # set parameters
 species.template.PTH <- 'data/book-resources/species-template.txt'
 chapter.template.PTH <- 'data/book-resources/chapter-template.txt'
-ebird.species.PTH <- 'book/data/species_names.rds'
-species.PTH <- 'book/data/species_data.rds'
+species.PTH <- 'book/data/species.rds'
+family.PTH <- 'book/data/family.rds'
+bookdown.yml.PTH <- 'data/book-resources/_bookdown.yml'
 
 # load packages
 library(plyr)
 library(dplyr)
+library(yaml)
 
 #### Preliminary processing
 # load data
 species.template.CHR <- readLines(species.template.PTH)
 chapter.template.CHR <- readLines(chapter.template.PTH)
-ebird.species.DF <- readRDS(ebird.species.PTH)
-
-# create family data
-ebird.family.DF <- ebird.species.DF %>%
-  select(Order.scientific.name,Family.scientific.name) %>%
-  distinct()
+species.DATA <- readRDS(species.PTH)
+bookdown.yml.LST <- yaml.load_file(bookdown.yml.PTH)
 
 #### Main processing
-# create file for each family  
-llply(
-  seq_len(nrow(ebird.family.DF)),
-  function(i) {
-    writeLines(
-      gsub('$$FAMILYINDEX$$', i, chapter.template.CHR, fixed=TRUE),
-      paste0('book/', 
-             ebird.family.DF$Order.scientific.name[i],
-             '-',
-             ebird.family.DF$Family.scientific.name[i],
-             '.Rmd'
-      )
-    )
-  }
-)
+# create species images
+dir.create('book/assets', showWarnings=FALSE, recursive=TRUE)
+species.DATA$make_species_dummy_images()
 
-# create file for each species
-llply(
-  seq_len(nrow(ebird.species.DF)),
-  function(i) {
+# create _bookdown.yml
+bookdown.yml.LST$rmd_files <- c('index.Rmd', unlist(llply(
+  species.DATA$get_family_scientific_names(),
+  function(x) {
+    # init
+    curr.order.CHR <- species.DATA$get_order_scientific_names(family.scientific.name==x)
+    curr.spp.CHR <- species.DATA$get_species_scientific_names(family.scientific.name==x)
+    # create file names
+    ret <- character(length(curr.spp.CHR)+1)
+    ret[1] <- paste0(curr.order.CHR, '-', x, '.Rmd')
+    ret[2:length(ret)] <- paste0(curr.order.CHR,
+                                  '-', x, '-', 
+                                  gsub(' ', '-', curr.spp.CHR, fixed=TRUE),
+                                  '.Rmd')
+    # write family chapter header
     writeLines(
-      gsub('$$SPECIESINDEX$$', i, species.template.CHR, fixed=TRUE),
-      paste0('book/', ebird.species.DF$Order.scientific.name[i],
-             '-', ebird.species.DF$Family.scientific.name[i],
-             '-', 
-             gsub(' ', '-', ebird.species.DF$Scientific.name[i], fixed=TRUE),
-             '.Rmd'
-      )
+      gsub('$$FAMILYNAME$$', x, chapter.template.CHR, fixed=TRUE),
+      file.path('book/', ret[1])
     )
+    # loop over species
+    sapply(
+      seq_along(curr.spp.CHR),
+      function(j) {
+        # write species
+        writeLines(
+          gsub('$$SPECIESNAME$$', curr.spp.CHR[j], species.template.CHR, fixed=TRUE),
+          file.path('book/', ret[j+1])
+        )
+      }
+    )
+    # exports
+    return(ret)
   }
-)
+), use.names=FALSE))
 
+
+
+#### Exports
+writeLines(as.yaml(bookdown.yml.LST), 'book/_bookdown.yml')

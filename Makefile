@@ -1,3 +1,11 @@
+#### Main instructions
+# reset book to orginal text -- warning: this will reset all the book pages
+reset: clean data init
+
+# build and deploy book
+all: build deploy
+
+#### Individual instructions
 # clean compiled book
 clean:
 	@rm -rf book/*
@@ -8,7 +16,7 @@ data: code/parameters/general.toml code/parameters/data.toml code/R/Species.R co
 	mv *.Rout book/
 
 # generate initial book with no text -- warning: this will reset all the book pages
-init: code/parameters/general.toml code/R/init.R data/book-resources/* data
+init: code/parameters/general.toml code/R/init.R data/book-resources/*
 	cp -r data/book-resources/* book
 	R CMD BATCH --no-save --no-restore ./code/R/init.R
 	mv *.Rout book/
@@ -22,7 +30,6 @@ update: code/parameters/general.toml code/R/update.R
 build:
 	cd book;\
 	Rscript -e "bookdown::render_book('index.Rmd')"
-	mv *.Rout book/
 
 # deploy book to website
 deploy:
