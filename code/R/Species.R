@@ -131,7 +131,7 @@ Species <- R6::R6Class("Species",
         }
       )
       # generate maps
-      if (output_format()=='html_document') {
+      if (knitr:::is_html_output()) {
         # create color palette
         values <- sapply(seasonal.LST, function(x) x$count) %>% c()
         pal <- leaflet::colorNumeric('YlGnBu',
@@ -184,11 +184,11 @@ Species <- R6::R6Class("Species",
           ggplot2::coord_cartesian(xlim=grid@bbox[1,], ylim=grid@bbox[2,]) +
           ggplot2::theme(legend.position = 'bottom',
                          legend.key.width = ggplot2::unit(2, 'cm',),
-                         legend.text = ggplot2::element_text(size=12),
-                         legend.title = ggplot2::element_text(size=12),
+                         legend.text = ggplot2::element_text(size=10),
+                         legend.title = ggplot2::element_text(size=10),
                          panel.border = ggplot2::element_rect(color=NA, fill=NA),
                          strip.background = ggplot2::element_rect(fill='grey20'),
-                         strip.text = ggplot2::element_text(color='white', size=15)) +
+                         strip.text = ggplot2::element_text(color='white', size=12)) +
           ggplot2::facet_wrap(~ season) +
           ggplot2::scale_fill_gradientn(name='Records',
             colors = RColorBrewer::brewer.pal(9, 'YlGnBu'))
@@ -214,7 +214,7 @@ Species <- R6::R6Class("Species",
       # elevation by month
       p2 <- curr.DF %>%
         dplyr::group_by(Month) %>%
-        dplyr::summarize(elev=mean(Elevation)) %>%
+        dplyr::summarize(elev=mean(Elevation,na.rm=TRUE)) %>%
         dplyr::ungroup() %>%
         ggplot2::ggplot(mapping=ggplot2::aes(x=Month, y=elev)) +
           ggplot2::geom_boxplot() +
@@ -234,56 +234,10 @@ Species <- R6::R6Class("Species",
           ggplot2::ylab('Percentage of records (%)') +
           ggplot2::scale_y_continuous(labels=scales::percent)
 
-          # assemble plot
-      gridExtra::arrangeGrob(p1, p2, p3, ncol=1)
-      # return graphs
-      return(invisible())
+      # assemble plot
+      gridExtra::arrangeGrob(p1, p2, p3, nrow=1)
     },
-    
-    ## image methods
-    #' Make species dummy images
-    #'
-    #' This method makes dummy images for each species. The file in 'data/book-resources/missing.png'
-    #' is used to initially represent the species missing images.
-    #' @return None. This function is used for its side effect of making images.
-    make_species_dummy_images = function() {
-      # init
-      image.PTH <- 'data/book-resources/missing.png'
-      dir.create('book/assests', showWarnings=FALSE, recursive=FALSE)
-      # copy it for each species
-      file.copy(
-        from=rep(image.PTH, nrow(self$data)),
-        to=file.path('book', self$get_species_dummy_image_path())
-      )
-      return(invisible())
-    },
-    #' Get species dummy image paths
-    #'
-    #' This method returns the files paths for species' dummy images.
-    #' These are initially stored 'book/assets'
-    #' @param species.scientific.name \code{character} vector of species' names.
-    #' @return \code{character} vector of file paths.
-    get_species_dummy_image_path = function(species.scientific.name) {
-      if (missing(species.scientific.name)) {
-        species.scientific.name <- as.character(self$data$species.scientific.name)
-      }
-      assertthat::assert_that(
-        all(is.character(species.scientific.name)),
-        all(species.scientific.name %in% self$data$species.scientific.name)
-      )
-      curr.DF <- self$data[self$data$species.scientific.name  %in% species.scientific.name,]
-      curr.DF <- curr.DF[match(curr.DF$species.scientific.name, species.scientific.name),]
-      # generate file without extension
-      return(
-        paste0(
-          'assets/',
-            curr.DF$order.scientific.name, '-',
-            curr.DF$family.scientific.name, '-',
-            gsub(' ', '-', curr.DF$species.scientific.name, fixed=TRUE), '.png'
-        )
-      )
-    },
-    
+        
     ## family methods
     make_family_phylogram = function(family.scientific.name) {
       # TODO

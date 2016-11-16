@@ -29,7 +29,8 @@ update: code/parameters/general.toml code/R/update.R
 # build book
 build:
 	cd book;\
-	Rscript -e "bookdown::render_book('index.Rmd')"
+	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')" ;\
+	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book')"
 
 # deploy book to website
 deploy:
@@ -45,7 +46,5 @@ deploy:
 	git add --all *
 	git commit -m "Update the book" || true
 	git push origin gh-pages
-	
-	mv *.Rout book/
 
 .PHONY: clean init data update build deploy

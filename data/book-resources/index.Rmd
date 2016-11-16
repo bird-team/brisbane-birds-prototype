@@ -18,9 +18,6 @@ description: "Bird atlas for Brisbane, Australia"
 # load packages
 library(dplyr)
 
-# load functions
-source('../code/R/misc.R')
-
 # load data
 grid.PLY <- readRDS('data/grid.rds')
 species.DATA <- readRDS('data/species.rds')

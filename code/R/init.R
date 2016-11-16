@@ -19,10 +19,6 @@ species.DATA <- readRDS(species.PTH)
 bookdown.yml.LST <- yaml.load_file(bookdown.yml.PTH)
 
 #### Main processing
-# create species images
-dir.create('book/assets', showWarnings=FALSE, recursive=TRUE)
-species.DATA$make_species_dummy_images()
-
 # create _bookdown.yml
 bookdown.yml.LST$rmd_files <- c('index.Rmd', unlist(llply(
   species.DATA$get_family_scientific_names(),

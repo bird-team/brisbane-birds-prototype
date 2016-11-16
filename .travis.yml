@@ -1,11 +1,22 @@
 language: r
 dist: trusty
-sudo: false
+sudo: true
 group: beta
 cache: packages
 
 os:
   - linux
+
+apt_packages:
+  - libgeos-dev
+  - libgeos-c1    
+  - curl
+  - libssh2-1-dev
+  - qpdf 
+
+r_binary_packages:
+  - rgdal
+  - rgeos
 
 before_script:
   - chmod +x ./Makefile
@@ -13,4 +24,3 @@ before_script:
 script:
   - make build
   - make deploy
-
