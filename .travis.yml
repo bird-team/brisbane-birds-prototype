@@ -2,6 +2,7 @@ language: r
 dist: trusty
 sudo: true
 group: beta
+cache: packages
 
 os:
   - linux
