@@ -37,7 +37,7 @@ deploy:
 	echo "here 1"
 	@set -e
 	echo "here 2"
-	@if [ -z "${GITHUB_PAT}"]; then exit 0; fi;
+	@if [ -z "${GITHUB_PAT}" ]; then exit 0; fi;
 	echo "here 3"
 	@if [ "${TRAVIS_BRANCH}" != "master" ]; then exit 0; fi;
 	
@@ -49,6 +49,11 @@ deploy:
 	echo "here 7"
 	@git clone -b gh-pages https://${GITHUB_PAT}@github.com/${TRAVIS_REPO_SLUG}.git book-output
 	echo "here 8"
+	
+	ls
+	ls book-output/
+	ls book-output/book
+	
 	@cp -r book-output/book/_book/* ./
 	
 	echo "here 9"
