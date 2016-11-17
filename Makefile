@@ -37,9 +37,9 @@ deploy:
 	echo "here 1"
 	@set -e
 	echo "here 2"
-	@[ -z "${GITHUB_PAT}"] && exit 0
+	@if [ -z "${GITHUB_PAT}"]; then exit 0; fi;
 	echo "here 3"
-	@[ "${TRAVIS_BRANCH}" != "master" ] && exit 0
+	@if [ "${TRAVIS_BRANCH}" != "master" ]; then exit 0; fi;
 	
 	echo "here 5"
 	@git config --global user.email "jeffrey.hanson@uqconnect.edu.au"
