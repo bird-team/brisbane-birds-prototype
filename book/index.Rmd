@@ -14,14 +14,48 @@ url: 'https\://github.com/bird-team/brisbane-birds'
 description: "Bird atlas for Brisbane, Australia"
 ---
 
-```{r, include=FALSE}
+```{r, include=FALSE, cache=FALSE}
 # load packages
 library(dplyr)
+
+# load functions
+source('../code/R/misc.R')
+
+# try to load data from cache
+cache.grid.PLY <- knitr::load_cache('cache-data', 'grid.PLY')
+cache.species.DATA <- knitr::load_cache('cache-data', 'species.DATA')
+if (inherits(cache.species.DATA, 'R6'))
+  cache.species.class.LST <- deparse.methods(cache.species.DATA)
 
 # load data
 grid.PLY <- readRDS('data/grid.rds')
 species.DATA <- readRDS('data/species.rds')
+species.class.LST <- deparse.methods(species.DATA)
+
+# set initial variables
+use.cache <- as.list(rep(FALSE, length(species.class.LST)))
+names(use.cache) <- names(species.class.LST)
+
+## determine if cache should be used
+# check if cache data is avialable
+if (inherits(cache.species.DATA, 'Species')) {
+  
+  # check if species data has changed
+  if (!identical(species.DATA$data, cache.species.DATA$data)) {
+    for (x in names(use.cache))
+      use.cache[[x]] <- FALSE
+
+   } else {
+    for (x in names(use.cache))
+      use.cache[[x]] <- isTRUE(all.equal(species.class.LST[[x]], cache.species.class.LST[[x]]))
+  }
+}
 ```
+```{r cache-data, include=FALSE, cache=TRUE, cache.rebuild=TRUE}
+grid.PLY <- grid.PLY
+species.DATA <- species.DATA
+```
+
 
 # Preface
 
@@ -29,4 +63,4 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed justo nunc. I
 
 In hac habitasse platea dictumst. Nullam lacus elit, luctus a cursus ut, tempus id arcu. Quisque ornare eleifend augue, ac aliquet sapien posuere porttitor. Nam lacinia, diam at molestie tempor, erat ligula vulputate ligula, id rutrum magna justo in lorem. Vivamus posuere risus augue. Ut velit elit, hendrerit sit amet lacus nec, mattis commodo neque. Cras vel felis sed purus sollicitudin pharetra eu eget arcu. In volutpat eleifend mauris, sed porta nunc dapibus a. Suspendisse fringilla tempus quam a fermentum. Morbi quis lacus nec eros maximus interdum. Nullam venenatis vehicula magna, a egestas est ornare vel. Fusce quis luctus orci, eget congue dolor. Morbi luctus est justo, quis porttitor lacus facilisis sit amet.
 
-Data obtain from [@r1]
+Data obtained from [@r1]

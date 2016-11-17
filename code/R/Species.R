@@ -109,7 +109,7 @@ Species <- R6::R6Class("Species",
     #' @param grid \code{SpatialPolygonsDataFrame} object to use for the grid.
     #' generating maps for pdf documents.
     #' @return \code{character} vector                
-    make_species_map = function(species.scientific.name, grid) {
+    make_species_maps = function(species.scientific.name, grid) {
       # init
       assertthat::assert_that(species.scientific.name %in% self$data$species.scientific.name)
       assertthat::assert_that(inherits(grid, 'SpatialPolygons'))
@@ -151,7 +151,7 @@ Species <- R6::R6Class("Species",
                                fillOpacity = 0.6, color = '#333333', weight=2.5, opacity=0.8, group = 'Spring') %>%
           leaflet::addMarkers(data=curr.species.PTS, group = 'Observations',
                               clusterOptions=leaflet::markerClusterOptions()) %>%
-          leaflet::addLegend(pal = pal, values = values, title = 'Records') %>%
+          leaflet::addLegend(pal = pal, values = values, title = 'Records', position='topright') %>%
           leaflet::addLayersControl(
             baseGroups = c('Summer', 'Winter', 'Autumn', 'Spring'), overlayGroups = c('Observations'),
             options = leaflet::layersControlOptions(collapsed = FALSE)) %>%
