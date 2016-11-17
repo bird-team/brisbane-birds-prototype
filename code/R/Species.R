@@ -151,7 +151,7 @@ Species <- R6::R6Class("Species",
                                fillOpacity = 0.6, color = '#333333', weight=2.5, opacity=0.8, group = 'Spring') %>%
           leaflet::addMarkers(data=curr.species.PTS, group = 'Observations',
                               clusterOptions=leaflet::markerClusterOptions()) %>%
-          leaflet::addLegend(pal = pal, values = values, title = 'Records', position='topright') %>%
+          leaflet::addLegend(pal = pal, values = values, title = 'Records', position='topleft') %>%
           leaflet::addLayersControl(
             baseGroups = c('Summer', 'Winter', 'Autumn', 'Spring'), overlayGroups = c('Observations'),
             options = leaflet::layersControlOptions(collapsed = FALSE)) %>%

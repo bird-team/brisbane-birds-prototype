@@ -114,7 +114,7 @@ The following object is masked from 'package:magrittr':
 > #### Preliminary processing
 > ## load data
 > ebird.DF <- fread(ebird.PTH, data.table=FALSE)  
-Read 2.7% of 372923 rowsRead 32.2% of 372923 rowsRead 59.0% of 372923 rowsRead 72.4% of 372923 rowsRead 99.2% of 372923 rowsRead 372923 rows and 47 (of 47) columns from 0.131 GB file in 00:00:07
+Read 2.7% of 372923 rowsRead 32.2% of 372923 rowsRead 59.0% of 372923 rowsRead 72.4% of 372923 rowsRead 372923 rows and 47 (of 47) columns from 0.131 GB file in 00:00:07
 Warning messages:
 1: In fread(ebird.PTH, data.table = FALSE) :
   Bumped column 8 to type character on data row 199, field contains 'Pheasant Coucal (Pheasant)'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
@@ -287,4 +287,4 @@ Warning messages:
 > 
 > proc.time()
    user  system elapsed 
-109.879   4.581 116.041 
+108.867   4.410 113.654 
