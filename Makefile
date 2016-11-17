@@ -35,6 +35,7 @@ build:
 # deploy book to website
 deploy:
 	set -e
+	echo "${GITHUB_PAT}"
 	[ -z "${GITHUB_PAT}"] && exit 0
 	[ "${TRAVIS_BRANCH}" != "master" ] && exit 0
 	
