@@ -34,18 +34,29 @@ build:
 
 # deploy book to website
 deploy:
+	echo "here 1"
 	@set -e
+	echo "here 2"
 	@[ -z "${GITHUB_PAT}"] && exit 0
+	echo "here 3"
 	@[ "${TRAVIS_BRANCH}" != "master" ] && exit 0
 	
+	echo "here 5"
 	@git config --global user.email "jeffrey.hanson@uqconnect.edu.au"
+	echo "here 6"
 	@git config --global user.name "Jeffrey O Hanson"
 	
+	echo "here 7"
 	@git clone -b gh-pages https://${GITHUB_PAT}@github.com/${TRAVIS_REPO_SLUG}.git book-output
+	echo "here 8"
 	@cp -r book-output/book/_book/* ./
 	
+	echo "here 9"
 	@git add --all *
+	echo "here 10"
 	@git commit -m "Update the book" || true
+	echo "here 11"
 	@git push origin gh-pages
+	echo "here 12"
 
 .PHONY: clean init data update build deploy
