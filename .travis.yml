@@ -18,7 +18,7 @@ apt_packages:
 
 before_install: 
   - sudo apt-get --yes --force-yes update -qq
-  - sudo tlmgr install makecell float hyperref
+  - tlmgr install makecell float hyperref
   - sudo apt-get --yes --force-yes remove pandoc pandoc-citeproc
   - sudo wget https://github.com/jgm/pandoc/releases/download/1.18/pandoc-1.18-1-amd64.deb |dpkg -i pandoc-1.18-1-amd64.deb
 
