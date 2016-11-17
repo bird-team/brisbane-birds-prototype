@@ -29,6 +29,7 @@ r_binary_packages:
 
 before_script:
   - chmod +x ./Makefile
+  - chmod +x ./_deploy.sh
 
 script:
   - make build
