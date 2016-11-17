@@ -1,13 +1,15 @@
 #### Main instructions
-# reset book to orginal text -- warning: this will reset all the book pages
-reset: clean data init
-
 # build and deploy book
 all: build deploy
 
 #### Individual instructions
 # clean compiled book
 clean:
+	@rm -rf book/_book/
+	@rm -rf book/_bookdown_files/
+
+# reset book to orginal text -- warning: this will reset all the book pages
+reset: clean
 	@Rscript -e "files <- dir('book', '^.*\\\\.Rmd', full.names=TRUE);unlink(files[which(files != 'book/index.Rmd')])"
 
 # generate data files for book
@@ -31,6 +33,7 @@ build:
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book')"
 	cd book;\
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
+
 
 # deploy book to website
 deploy:

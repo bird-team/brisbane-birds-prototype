@@ -1,9 +1,12 @@
+bookdown::gitbook:
+  css: style.css
+  split_by: chapter
+  config:
+    toc:
+      collapse: section
+    download: [pdf]
+    edit: https://github.com/bird-team/brisbane-birds/edit/master/book/%s
 bookdown::pdf_book:
   keep_tex: true
   include:
     in_header: preamble.tex
-bookdown::gitbook:
-  css: style.css
-  config:
-    edit:
-      link: https://github.com/bird-team/brisbane-birds/edit/master/%s

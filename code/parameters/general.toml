@@ -1,4 +1,4 @@
 title = "general parameters" 
 
 crs.code = "+init=epsg:3857" # coordinate reference system to use for mapping
-number.species = 5 # number of species to include in book. Set to "all" to include all species in book
+number.species = 'all' # number of species to include in book. Set to "all" to include all species in book
