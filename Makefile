@@ -46,8 +46,8 @@ deploy:
 	@cp -r book/_book/* book-output/
 	
 	@cd book-output;\
-	@git add --all *;\
-	@git commit -m "Update the book" || true;\
-	@git push origin gh-pages
+	git add --all *;\
+	git commit -m "Update the book" || true;\
+	git push origin gh-pages
 
 .PHONY: clean init data update build deploy
