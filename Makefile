@@ -28,9 +28,9 @@ update: code/parameters/general.toml code/R/update.R
 # build book
 build:
 	cd book;\
-	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
-	cd book;\
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book')"
+	cd book;\
+	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
 
 # deploy book to website
 deploy:

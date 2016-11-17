@@ -1,9 +1,7 @@
 --- 
 title: "Brisbane Birds"
-author: |
-  | Richard A. Fuller$^1$, Jeffrey O. Hanson$^1$
-  | $^1$School of Biological Sciences, The University of Queensland, Brisbane, QLD, Australia
-  | Correspondance should be addressed to r.fuller@uq.edu.au
+author: | Richard A. Fuller, Jeffrey O. Hanson
+date: "` Sys.Date()`"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
