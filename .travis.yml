@@ -32,4 +32,4 @@ before_script:
 
 script:
   - make build
-  - make deploy
+  - ./_deploy.sh

@@ -11,6 +11,7 @@
 
 # system files
 .directory
+*.kate-swp
 
 # do not ignore the following files
 !.gitkeep

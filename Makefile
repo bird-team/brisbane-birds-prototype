@@ -35,13 +35,13 @@ build:
 # deploy book to website
 deploy:
 	@set -e
-	@if [ -z "${GITHUB_PAT}" ]; then exit 0; fi;
+	@if [ -z "${GITHUB_TOKEN}" ]; then exit 0; fi;
 	@if [ "${TRAVIS_BRANCH}" != "master" ]; then exit 0; fi;
 	
 	@git config --global user.email "jeffrey.hanson@uqconnect.edu.au"
 	@git config --global user.name "Jeffrey O Hanson"
 	
-	@git clone -b gh-pages https://${GITHUB_PAT}@github.com/${TRAVIS_REPO_SLUG}.git book-output
+	@git clone -b gh-pages https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git book-output
 	
 	@cp -r book/_book/* book-output/
 	
