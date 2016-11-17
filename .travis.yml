@@ -4,6 +4,9 @@ sudo: true
 group: beta
 cache: packages
 
+env:
+  global:
+    - secure: "AoGaKyx+day7UlZRcJSRZ7bYRXXtwFaHsTfzARfSWiEPt05Y8BiDKWRduuo+ul+jlLSuPV8DoIGyQWhK3cbeopbOX9uQRCEYvw7A6V5+50pO7eXl+UTliJYb60oAv6YykWloAcg1Xs5FXK4/UdkZbRA/p8pg2EJS0UGfSeX8NDBazVWEnw5M0PpgOvv9mhr6YhHo8wLNGUnJY/RsD7ILLLlcu2HoTksXee3bJfAgl9o34uaw72wgJVkMyC30k/vjI7s4X7XmISScHmbug2PzqhKajsZywb3lzbs2Q/pObN9ibTWzUkLQb/7S6MS2jipoBOLAOm2u8+9uEw6L4EzvwrosPi2ZsQkPnUq77ckPCX3hg2zFas1WfusOZcDGIBiKVP8yWgvuKSWjeQUpkGtmwYkZB8E8Pd3wpUzBJSlLXyCu2rM1ZtVtddp5zmxHWR+bu+Hqpnn8Fxq/gN+Rsjlkg9hJnAnroiEFaFuxFGCMEqOseQg3GgoYiyaveyk7jqGf+/XwgPcJE5qF3utfoNzd4ix+jwLTnNRXPVCMPFW/bim8Tk+kqLzwGKljItvIWmhW/cU/2AHfXYheIYmF58BOe0MEnvX5/3wCqj8cEkCgVRsNuYNL/kZKy2XbpTdhAz8LW7g6opKZn4Cbk4Aj+wyn8iCNx9dKuMWJBbQTSy7NIns="
 os:
   - linux
 
@@ -29,8 +32,7 @@ r_binary_packages:
 
 before_script:
   - chmod +x ./Makefile
-  - chmod +x ./_deploy.sh
 
 script:
   - make build
-  - ./_deploy.sh
+  - make deploy

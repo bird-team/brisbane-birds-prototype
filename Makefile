@@ -32,4 +32,22 @@ build:
 	cd book;\
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book')"
 
+# deploy book to website
+deploy:
+	@set -e
+	@if [ -z "${GITHUB_PAT}" ]; then exit 0; fi;
+	@if [ "${TRAVIS_BRANCH}" != "master" ]; then exit 0; fi;
+	
+	@git config --global user.email "jeffrey.hanson@uqconnect.edu.au"
+	@git config --global user.name "Jeffrey O Hanson"
+	
+	@git clone -b gh-pages https://${GITHUB_PAT}@github.com/${TRAVIS_REPO_SLUG}.git book-output
+	
+	@cp -r book/_book/* book-output/
+	
+	@cd book-output;\
+	git add --all *;\
+	git commit -m "Update the book" || true;\
+	git push origin gh-pages
+
 .PHONY: clean init data update build deploy
