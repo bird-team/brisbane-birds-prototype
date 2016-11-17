@@ -2,7 +2,11 @@ language: r
 dist: trusty
 sudo: true
 group: beta
-cache: packages
+
+cache:
+  packages: yes
+  directories:
+    - $TRAVIS_BUILD_DIR/book/_bookdown_files
 
 env:
   global:

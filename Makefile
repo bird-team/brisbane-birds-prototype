@@ -15,23 +15,23 @@ reset: clean
 # generate data files for book
 data: code/parameters/general.toml code/parameters/data.toml code/R/Species.R code/R/data.R data/ebird/* data/study-area/*
 	R CMD BATCH --no-save --no-restore ./code/R/data.R
-	@mv *.Rout book/logs
+	@mv *.Rout book/logs/
 
 # generate initial book with no text -- warning: this will reset all the book pages
 init: code/parameters/general.toml code/R/init.R
 	R CMD BATCH --no-save --no-restore ./code/R/init.R
-	@mv *.Rout book/logs
+	@mv *.Rout book/logs/
 
 # update graphs in existing book pages with graphs in template file
 update: code/parameters/general.toml code/R/update.R
 	R CMD BATCH --no-save --no-restore ./code/R/update.R
-	@mv *.Rout book/logs
+	@mv *.Rout book/logs/
 
 # build book
 build:
 	cd book;\
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book')"
-	cd book;\
+# 	cd book;\
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
 
 
@@ -53,4 +53,5 @@ deploy:
 	git commit -m "Update the book" || true;\
 	git push origin gh-pages
 
-.PHONY: clean init data update build deploy
+.PHONY: clean init data update build deploy reset
+
