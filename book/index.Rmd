@@ -50,6 +50,10 @@ if (inherits(cache.species.DATA, 'Species')) {
       use.cache[[x]] <- isTRUE(all.equal(species.class.LST[[x]], cache.species.class.LST[[x]]))
   }
 }
+
+## save cache for debugging
+write.table(tidyr::gather(as.data.frame(use.cache),method,value), file='cache_usage.csv' row.names=FALSE, sep=',')
+
 ```
 ```{r cache-data, include=FALSE, cache=TRUE, cache.rebuild=TRUE}
 grid.PLY <- grid.PLY
