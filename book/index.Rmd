@@ -52,7 +52,7 @@ if (inherits(cache.species.DATA, 'Species')) {
 }
 
 ## save cache for debugging
-write.table(tidyr::gather(as.data.frame(use.cache),method,value), file='cache_usage.csv' row.names=FALSE, sep=',')
+write.table(tidyr::gather(as.data.frame(use.cache),method,value), file='cache_usage.csv', row.names=FALSE, sep=',')
 
 ```
 ```{r cache-data, include=FALSE, cache=TRUE, cache.rebuild=TRUE}

@@ -31,7 +31,7 @@ update: code/parameters/general.toml code/R/update.R
 build:
 	cd book;\
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book')"
-# 	cd book;\
+	cd book;\
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
 
 
