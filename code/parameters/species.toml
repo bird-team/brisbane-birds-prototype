@@ -1,0 +1,19 @@
+title = "species data parameters"
+
+["ebird"]
+scientific.column.name = "SCIENTIFIC_NAME" # column name for species' scientific names
+
+date.column.name = "OBSERVATION_DATE" # column name for observation date
+date.column.format = "%d/%m/%Y"  # date format for observation dates - see ?strptime for more information
+
+longitude.column.name = "LON" # column name for longitude of observation 
+latitude.column.name = "LAT"# column name for latitude of observation
+
+start.date = '01/01/2006' # omit records collected before this date
+
+["taxonomy"]
+sort.column.name = 'TAXON_ORDER' # column name to using for sorting species
+scientific.column.name = "SCI_NAME" # column name for species' scientific names
+common.column.name = "PRIMARY_COM_NAME" # column name for species' common name
+family.column.name = "FAMILY" # column name for species' family names
+order.column.name = "ORDER" # column name for species' order names

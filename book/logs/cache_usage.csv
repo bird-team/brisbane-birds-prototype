@@ -1,0 +1,11 @@
+"method","value"
+"clone",FALSE
+"make_family_phylogram",FALSE
+"make_species_graphs",FALSE
+"make_species_maps",FALSE
+"make_family_title",FALSE
+"make_species_title",FALSE
+"get_species_scientific_names",FALSE
+"get_order_scientific_names",FALSE
+"get_family_scientific_names",FALSE
+"initialize",FALSE

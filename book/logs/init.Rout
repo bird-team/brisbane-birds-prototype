@@ -64,7 +64,11 @@ The following objects are masked from 'package:base':
 +     ret[1] <- paste0(curr.order.CHR, '-', x, '.Rmd')
 +     ret[2:length(ret)] <- paste0(curr.order.CHR,
 +                                   '-', x, '-', 
-+                                   gsub(' ', '-', curr.spp.CHR, fixed=TRUE),
++                                   curr.spp.CHR %>%
++                                     gsub(pattern='(', replacement='', fixed=TRUE) %>%
++                                     gsub(pattern=')', replacement='', fixed=TRUE) %>%
++                                     gsub(pattern='/', replacement='', fixed=TRUE) %>%
++                                     gsub(pattern=' ', replacement='-', fixed=TRUE),
 +                                   '.Rmd')
 +     # write family chapter header
 +     writeLines(
@@ -86,13 +90,10 @@ The following objects are masked from 'package:base':
 +     return(ret)
 +   }
 + ), use.names=FALSE))
-There were 50 or more warnings (use warnings() to see the first 50)
-> 
-> 
 > 
 > #### Exports
 > writeLines(as.yaml(bookdown.yml.LST), bookdown.yml.PTH)
 > 
 > proc.time()
    user  system elapsed 
-  7.779   0.695   9.104 
+  4.027   0.194   4.214 

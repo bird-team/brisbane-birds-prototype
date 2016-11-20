@@ -31,7 +31,11 @@ bookdown.yml.LST$rmd_files <- c('index.Rmd', unlist(llply(
     ret[1] <- paste0(curr.order.CHR, '-', x, '.Rmd')
     ret[2:length(ret)] <- paste0(curr.order.CHR,
                                   '-', x, '-', 
-                                  gsub(' ', '-', curr.spp.CHR, fixed=TRUE),
+                                  curr.spp.CHR %>%
+                                    gsub(pattern='(', replacement='', fixed=TRUE) %>%
+                                    gsub(pattern=')', replacement='', fixed=TRUE) %>%
+                                    gsub(pattern='/', replacement='', fixed=TRUE) %>%
+                                    gsub(pattern=' ', replacement='-', fixed=TRUE),
                                   '.Rmd')
     # write family chapter header
     writeLines(
@@ -53,8 +57,6 @@ bookdown.yml.LST$rmd_files <- c('index.Rmd', unlist(llply(
     return(ret)
   }
 ), use.names=FALSE))
-
-
 
 #### Exports
 writeLines(as.yaml(bookdown.yml.LST), bookdown.yml.PTH)

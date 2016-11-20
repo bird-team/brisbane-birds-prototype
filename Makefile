@@ -7,17 +7,24 @@ all: build deploy
 clean:
 	@rm -rf book/_book/
 	@rm -rf book/_bookdown_files/
+	@rm -rf book/data
 
 # reset book to orginal text -- warning: this will reset all the book pages
 reset: clean
 	@Rscript -e "files <- dir('book', '^.*\\\\.Rmd', full.names=TRUE);unlink(files[which(files != 'book/index.Rmd')])"
 
 # generate data files for book
-data: code/parameters/general.toml code/parameters/data.toml code/R/Species.R code/R/data.R data/ebird/* data/study-area/*
-	R CMD BATCH --no-save --no-restore ./code/R/data.R
+data: book/data/grid.rds book/data/species.rds
+
+book/data/species.rds: code/parameters/general.toml code/parameters/species.toml code/R/Species.R code/R/make_species_data.R book/data/grid.rds data/ebird/* data/study-area/* data/taxonomy/*
+	R CMD BATCH --no-save --no-restore code/R/make_species_data.R
 	@mv *.Rout book/logs/
 
-# generate initial book with no text -- warning: this will reset all the book pages
+book/data/grid.rds: code/parameters/general.toml code/parameters/grid.toml code/R/make_grid_data.R data/study-area/*
+	R CMD BATCH --no-save --no-restore code/R/make_grid_data.R
+	@mv *.Rout book/logs/
+
+# generate initial book with no text (warning: this will reset all the book pages)
 init: code/parameters/general.toml code/R/init.R
 	R CMD BATCH --no-save --no-restore ./code/R/init.R
 	@mv *.Rout book/logs/
@@ -54,4 +61,3 @@ deploy:
 	git push origin gh-pages
 
 .PHONY: clean init data update build deploy reset
-

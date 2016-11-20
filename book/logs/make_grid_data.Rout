@@ -1,0 +1,117 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> #### Initialization
+> # set parameters
+> study.area.PTH <- dir('data/study-area', '^.*\\.shp$', full.names=TRUE)
+> 
+> # load packages
+> library(magrittr)
+> library(data.table)
+> library(rgdal)
+Loading required package: sp
+rgdal: version: 1.1-10, (SVN revision 622)
+ Geospatial Data Abstraction Library extensions to R successfully loaded
+ Loaded GDAL runtime: GDAL 1.10.1, released 2013/08/26
+ Path to GDAL shared files: /usr/share/gdal/1.10
+ Loaded PROJ.4 runtime: Rel. 4.8.0, 6 March 2012, [PJ_VERSION: 480]
+ Path to PROJ.4 shared files: (autodetected)
+ Linking to sp version: 1.2-3 
+> library(rgeos)
+rgeos version: 0.3-21, (SVN revision 540)
+ GEOS runtime version: 3.4.2-CAPI-1.8.2 r3921 
+ Linking to sp version: 1.2-3 
+ Polygon checking: TRUE 
+
+> library(raster)
+
+Attaching package: 'raster'
+
+The following object is masked from 'package:data.table':
+
+    shift
+
+The following object is masked from 'package:magrittr':
+
+    extract
+
+> library(plyr)
+> library(dplyr)
+------------------------------------------------------------------------------
+data.table + dplyr code now lives in dtplyr.
+Please library(dtplyr)!
+------------------------------------------------------------------------------
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:plyr':
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise,
+    summarize
+
+The following objects are masked from 'package:raster':
+
+    intersect, select, union
+
+The following objects are masked from 'package:rgeos':
+
+    intersect, setdiff, union
+
+The following objects are masked from 'package:data.table':
+
+    between, last
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> library(RcppTOML)
+> library(assertthat)
+> 
+> # load parameters
+> general.parameters.LST <- parseTOML('code/parameters/general.toml')
+> grid.parameters.LST <- parseTOML('code/parameters/grid.toml')
+> 
+> #### Preliminary processing
+> ## load data
+> study.area.SHP <- shapefile(study.area.PTH) %>%
++   spTransform(CRS(general.parameters.LST$crs.code))
+> 
+> #### Main processing
+> # grid data
+> grid.PLY <- study.area.SHP %>%
++   extent() %>%
++   raster(res=grid.parameters.LST[['grid.resolution']]) %>%
++   as('SpatialPolygons')
+> grid.PLY@proj4string <- CRS(general.parameters.LST[['crs.code']])
+> grid.PLY <- grid.PLY[gIntersects(study.area.SHP, grid.PLY, byid=TRUE, returnDense=FALSE)[[1]],]
+> grid.PLY <- grid.PLY %>% 
++   spTransform('+init=epsg:4326')
+> 
+> #### Exports
+> # save species objects
+> dir.create('book/data', showWarnings=FALSE, recursive=TRUE)
+> saveRDS(grid.PLY, 'book/data/grid.rds', compress='xz')
+>  
+> 
+> proc.time()
+   user  system elapsed 
+  5.660   0.151   5.979 

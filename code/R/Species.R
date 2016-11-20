@@ -54,7 +54,8 @@ Species <- R6::R6Class("Species",
       self$data %>% 
         filter(...) %>%
         select(family.scientific.name) %>%
-        `[[`(1)
+        `[[`(1) %>%
+        unique()
     },
     #' Get order names
     #'
@@ -66,7 +67,8 @@ Species <- R6::R6Class("Species",
       self$data %>% 
         dplyr::filter(...) %>%
         dplyr::select(order.scientific.name) %>%
-        `[[`(1)    
+        `[[`(1) %>%
+        unique()
     },
     #' Get species names
     #'
@@ -78,7 +80,8 @@ Species <- R6::R6Class("Species",
       self$data %>% 
         dplyr::filter(...) %>%
         dplyr::select(species.scientific.name) %>%
-        `[[`(1)
+        `[[`(1) %>%
+        unique()
     },
     ## title methods
     #' Get a species' section header

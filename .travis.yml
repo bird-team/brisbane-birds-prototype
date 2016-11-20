@@ -7,6 +7,7 @@ cache:
   packages: yes
   directories:
     - $TRAVIS_BUILD_DIR/book/_bookdown_files
+    - $TRAVIS_BUILD_DIR/book/data
 
 env:
   global:
@@ -38,5 +39,6 @@ before_script:
   - chmod +x ./Makefile
 
 script:
+  - make data
   - make build
   - make deploy

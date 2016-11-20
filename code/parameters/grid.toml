@@ -1,0 +1,3 @@
+title = "grid parameters"
+
+grid.resolution = 2000 # resolution of grid in meters

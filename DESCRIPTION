@@ -15,6 +15,7 @@ Imports:
   plotly,
   gridExtra,
   data.table,
+  readxl,
   broom,
   plyr,
   dplyr,
