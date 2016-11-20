@@ -5,5 +5,8 @@
 Brisbane Birds
 ===================
 
-This repository contains the source code for "Brisbane Birds".
+Brisbane Birds is a citizen science driven bird atlas for Brisbane.
 
+This repository contains the source code for this project.
+
+[Visit the online bird atlas here](http://bird-team.github.io/brisbane-birds), or [download the pdf version](https://github.com/bird-team/brisbane-birds/raw/gh-pages/brisbane-birds.pdf).
