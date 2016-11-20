@@ -9,7 +9,7 @@ date.column.format = "%d/%m/%Y"  # date format for observation dates - see ?strp
 longitude.column.name = "LON" # column name for longitude of observation 
 latitude.column.name = "LAT"# column name for latitude of observation
 
-start.date = '01/01/2006' # omit records collected before this date
+start.date = '01/01/2007' # omit records collected before this date
 
 ["taxonomy"]
 sort.column.name = 'TAXON_ORDER' # column name to using for sorting species
